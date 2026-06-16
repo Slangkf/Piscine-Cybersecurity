@@ -84,6 +84,7 @@ def scrape(url, depth_level, already_visited):
 		parsed_url = urlparse(img_url)
 		extension = os.path.splitext(parsed_url.path)[1].lower()
 		if extension not in authorized_extensions:
+			print(f"Extension {extension} is not an authorized image format. Skipping.")
 			continue
 		try:
 			img_downloaded = requests.get(img_url, headers={'User-Agent': 'Mozilla/5.0'})
