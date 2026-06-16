@@ -1,5 +1,3 @@
-# Command to launch venv : source venv/bin/activate
-
 import sys # for argv list
 import argparse # to parse arguments
 import requests # for HTTP requets
@@ -8,12 +6,14 @@ from urllib.parse import urljoin # to build absolute URLs from relative ones
 from urllib.parse import urlparse # to decompose a URL into its components (scheme, path, query...)
 import os
 
+# Command line arguments parsing
 parser = argparse.ArgumentParser(description='Scrap images from a website')
 parser.add_argument('url', type=str, help='the URL of the website')
 parser.add_argument('-r', action="store_true", help='recursively downloads the images in the given URL')
 parser.add_argument('-l', type=int, default=None, help='indicates the maximum depth level of the recursive download. 5 by default')
 parser.add_argument('-p', type=str, default='./data/', help='indicates the path where the downloaded files will be saved. ./data/ by default')
 
+# Parses the command line arguments and stores them in the args variable.
 args = parser.parse_args()
 
 # Checks if the -r option exists when the -l option is called.
@@ -25,19 +25,26 @@ if args.l is not None and not args.r:
 if args.l is None and args.r:
 	args.l = 5
 
+# Creates the directory where the images will be saved if it does not exist.
 try:
 	os.makedirs(args.p, exist_ok=True)
 except OSError:
 	print('Cannot create directory')
 	sys.exit(1)
 
+# Gets the base domain of the given URL to check if the links found in the page are in the same domain.
+# If the -l option is not defined, set the initial depth level to 0. Otherwise, set it to the value of the -l option.
+# Set to keep track of visited URLs to avoid infinite loops in recursive scraping.
+# Set of authorized image extensions to filter the images to be downloaded.
 base_domain = urlparse(args.url).netloc
 initial_depth_level = 0 if args.l is None else args.l
 visited = set()
 authorized_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.bmp'}
 
-def	scrape(url, depth_level, already_visited):
-	
+# Scrapes the given URL and downloads the images found in it.
+# If the -r option is called, it recursively scrapes the links found in the page until the maximum depth level is reached.
+def scrape(url, depth_level, already_visited):
+
 	if url in already_visited: return
 	already_visited.add(url) 
 
@@ -95,6 +102,10 @@ def	scrape(url, depth_level, already_visited):
 			print('Exception raised in the image writing.')
 			continue
 
+	# If the -r option is called and the depth level is greater than 0, for each <a> tag:
+	# gets the value of 'href'
+	# builds an absolute URL if necessary
+	# checks if the link is in the same domain as the base URL
 	if args.r and depth_level > 0:
 		for link in soup.find_all('a'):
 			href = link.get('href')
@@ -105,4 +116,5 @@ def	scrape(url, depth_level, already_visited):
 				print(f'Going to scrape: {absolute_href}')
 				scrape(absolute_href, depth_level - 1, already_visited)
 
+# Start the scraping process
 scrape(args.url, initial_depth_level, visited)
