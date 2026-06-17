@@ -1,4 +1,3 @@
-import sys # for argv list
 import argparse # to parse arguments
 from PIL import Image # to open images
 import exifread # to read EXIF metadata
@@ -20,30 +19,30 @@ def display_exif_metadata(image_path):
         with open(image_path, 'rb') as image_file:
             tags = exifread.process_file(image_file)
             if tags:
-                print("EXIF data found in the image:")
+                print(f"\nEXIF data found in the image {image_path}:")
                 for tag, value in tags.items():
                     print(f"{tag}: {value}")
             else:
-                print("No EXIF data found in the image.")
+                print(f"\nNo EXIF data in the image {image_path}.")
     except Exception as e:
-        print(f"Exception raised while reading EXIF data from {image_path}: {e}")
+        print(f"\nException raised while reading EXIF data from {image_path}: {e}")
 
 # Checks if the image can be opened and displays its format, mode, and size.
 def display_image_metadata(image_path):
     try:
         with Image.open(image_path) as img:
-            print("\nImage metadata:")
+            print(f"\n{image_path} image metadata:")
             print(f"Format: {img.format}")
             print(f"Mode: {img.mode}")
             print(f"Size: {img.size}")
     except Exception as e:
-        print(f"Exception raised while reading image metadata from {image_path}: {e}")
+        print(f"\nException raised while reading image metadata from {image_path}: {e}")
 
 # Iterates through the provided image paths, checks if they are authorized image formats, and displays their EXIF and other metadata.
 for file in args.path:
     extension = os.path.splitext(file)[1].lower()
     if extension not in authorized_extensions:
-        print(f"File {file} is not an authorized image format. Skipping.")
+        print(f"\nFile {file} is not an authorized image format. Skipping.")
         continue
     display_exif_metadata(file)
     display_image_metadata(file)
