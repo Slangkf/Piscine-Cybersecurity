@@ -1,10 +1,10 @@
-import sys # for argv list
+import sys
+import os
 import argparse # to parse arguments
 import requests # for HTTP requets
 from bs4 import BeautifulSoup # to parse HTML text
 from urllib.parse import urljoin # to build absolute URLs from relative ones
 from urllib.parse import urlparse # to decompose a URL into its components (scheme, path, query...)
-import os
 
 # Command line arguments parsing
 parser = argparse.ArgumentParser(description='Scrap images from a website')
