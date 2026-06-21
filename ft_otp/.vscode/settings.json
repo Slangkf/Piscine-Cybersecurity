@@ -1,0 +1,10 @@
+{
+    "editor.suggest.enabled": false,
+    "editor.quickSuggestions": {
+        "other": false,
+        "comments": false,
+        "strings": false
+    },
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.inlineSuggest.enabled": false
+}
