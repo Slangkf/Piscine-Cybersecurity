@@ -45,7 +45,9 @@ authorized_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.bmp'}
 # If the -r option is called, it recursively scrapes the links found in the page until the maximum depth level is reached.
 def scrape(url, depth_level, already_visited):
 
-	if url in already_visited: return
+	if url in already_visited:
+		print(f'Already visited: {url}')
+		return
 	already_visited.add(url) 
 
 	# HTTP GET request (returns a Response object).
@@ -116,6 +118,7 @@ def scrape(url, depth_level, already_visited):
 			if urlparse(absolute_href).netloc == base_domain:
 				print(f'Going to scrape: {absolute_href}')
 				scrape(absolute_href, depth_level - 1, already_visited)
+	print(f'Finished scraping: {url}, depth level: {depth_level}')
 
 # Start the scraping process
 scrape(args.url, initial_depth_level, visited)
