@@ -2,7 +2,7 @@
 
 ![](./shared/note.png)
 
-![](./shared/feedbacks.png)
+![](./shared/feedback.png)
 
 # Description
 
