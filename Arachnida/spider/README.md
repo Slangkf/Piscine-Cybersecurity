@@ -1,5 +1,9 @@
 *This project was created in June 2026 as part of the 42 curriculum by tclouet.*
 
+![](../shared/note.png)
+
+![](../shared/feedback.png)
+
 # Description
 
 *This section presents the project, its goals, and a brief overview.*
