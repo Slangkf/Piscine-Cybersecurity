@@ -6,7 +6,9 @@ import hmac # to calculate the HMAC-SHA1 hash required by the HOTP algorithm
 
 FERNET_KEY=""
 
-# Extracting a 31-bit value from the 20-byte HMAC-SHA1 digest
+# Implements the dynamic truncation step defined in RFC 4226.
+# The last 4 bits of the HMAC digest determines an offset from
+# which 4 bytes are extracted to form a 31-bit positive integer.
 def dynamic_truncation(hmac_result):
     try:
         offset = hmac_result[19] & 0xf
@@ -34,7 +36,8 @@ def generate_hotp(secret, counter):
         print(f'ft_otp: error: {e}')
         sys.exit(1)
 
-# Reads and decrypts the secret key stored in the given encrypted key file
+# Reads the encrypted key file, decrypts it using Fernet,
+# and returns the original hexadecimal secret key.
 def get_secret_key(infile):
     try:
         f = Fernet(FERNET_KEY)
@@ -46,12 +49,14 @@ def get_secret_key(infile):
         print(f'ft_otp: error: {e}')
         sys.exit(1)
 
-# Generates a time-based OTP (TOTP) using the secret stored in infile
+# Generates a TOTP code by computing the current time-step
+# (30-second window) and passing it to the HOTP algorithm.
 def generate_totp(infile):
     decoded_secret = get_secret_key(infile)
     return generate_hotp(decoded_secret, int(time.time()) // 30)
 
-# Validates that the given string is a properly formatted hexadecimal key
+# Verifies that the provided secret is a valid hexadecimal string
+# and contains at least 64 hexadecimal characters.
 def is_valid_content(content):
     try:
         if len(content) % 2 != 0 or len(content) < 64:
@@ -62,7 +67,9 @@ def is_valid_content(content):
         print('ft_otp: error: invalid key format.')
         return False
 
-# Reads a plaintext hex key from infile, validates it, encrypts it with Fernet, and writes it to ft_otp.key
+# Reads a plaintext hexadecimal secret from a file, validates it,
+# encrypts it using Fernet, and stores the encrypted key in
+# the ft_otp.key file.
 def generate_secret_key(infile):
     try:
         f = Fernet(FERNET_KEY)
@@ -78,8 +85,9 @@ def generate_secret_key(infile):
         print(f'ft_otp: error: {e}')
         sys.exit(1)
 
-# Defines and parses the command-line interface:
-# -g to generate a key file, -k to generate an OTP from an existing key file
+# Configures and parses command-line arguments.
+# -g : generate an encrypted ft_otp.key file from a plaintext key.
+# -k : generate a TOTP code from an existing encrypted key file.
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Generate a one-time password (OTP) using a HMAC key.')
     group = parser.add_mutually_exclusive_group(required=True)
