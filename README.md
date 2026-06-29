@@ -23,7 +23,7 @@ To validate this piscine you must do the following projects:
 
 - [x] Cybersecurity - arachnida - Web
 - [x] Cybersecurity - ft_otp - OTP
-- [ ] Cybersecurity - ft_onion - Web
+- [x] Cybersecurity - ft_onion - Web
 - [ ] Cybersecurity - Reverse me - Rev
 - [ ] Cybersecurity - Stockholm - Malware
 - [ ] (Optional) Cybersecurity - Iron Dome - Malware
