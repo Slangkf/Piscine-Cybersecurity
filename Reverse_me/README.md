@@ -2,7 +2,7 @@
 
 ![](./utils/note.png)
 
-![](./utils/feedback.png)
+![](./utils/feedbacks.png)
 
 # Description
 
@@ -67,7 +67,7 @@ Next, the binary is loaded into GDB. Using `info functions` reveals the imported
 
 ![info_command](./utils/level1/info_command.png)
 
-A breakpoint is then set on `main`, and the function is disassembled. The assembly code shows that the program prompts the user for a key with `printf`, reads the input using `scanf`, and finally compares it with a reference string using `strcmp`.
+A breakpoint is then set on `main`, and the function is disassembled using `disassemble main`. The assembly code shows that the program prompts the user for a key with `printf`, reads the input using `scanf`, and finally compares it with a reference string using `strcmp`.
 
 ![disassembled_main](./utils/level1/disassembled_main.png)
 
