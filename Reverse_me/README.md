@@ -59,9 +59,9 @@ It consists of three programs with increasing levels of difficulty. The goal is 
 
 ## Level 1
 
-![file_command](./utils/level1/file_command.png)
-
 The analysis begins by identifying the binary with the `file` command. The output shows that the executable is a 32-bit ELF binary and, most importantly, that it is **not stripped**. This means function names are still available, making the analysis much easier.
+
+![file_command](./utils/level1/file_command.png)
 
 Next, the binary is loaded into GDB. Using `info functions` reveals the imported functions (`printf`, `scanf`, `strcmp`) as well as the program's `main` function, which is the logical starting point for the analysis.
 
