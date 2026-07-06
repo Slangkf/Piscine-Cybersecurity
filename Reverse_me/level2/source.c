@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
-int ok()
+int ok(void)
 {
     return puts("Good job.");
 }
 
-void no()
+void no(void)
 {
     puts("Nope.");
     exit(1);
@@ -17,19 +18,19 @@ void no()
 int main(void)
 {
     printf("Please enter key: ");
-    char buf[24];
+    char input[24];
     
-    if (1 != scanf("%23s", buf))
+    if (1 != scanf("%23s", input))
     {
         no();
     }
     
-    if ('0' != buf[0])
+    if ('0' != input[1])
     {
         no();
     }
 
-    if ('0' != buf[1])
+    if ('0' != input[0])
     {
         no();
     }
@@ -48,16 +49,16 @@ int main(void)
         int flag = 0;
         if (strlen(key) < 8)
         {
-            flag = i < strlen(buf);
+            flag = i < strlen(input);
         }
 
         if (flag == 0)
             break;
         
-        char letter[4];
-        memset(&letter, 0, 4);
-        strncpy(letter, &buf[i], 3);
-        key[j] = atoi(letter);
+        char buffer[4];
+        memset(&buffer, 0, 4);
+        strncpy(buffer, &input[i], 3);
+        key[j] = atoi(buffer);
         i += 3;
         j += 1;
     }

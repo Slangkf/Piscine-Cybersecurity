@@ -4,22 +4,23 @@ FROM	debian:bookworm
 
 # Allows packages for the i386 architecture.
 # Updates the package list and upgrades those that are installed.
-# Installs required packages and then clean the apt cache.
+# Installs required packages, then cleans the apt cache.
 RUN		dpkg --add-architecture i386 && \
 		apt update -y && apt upgrade -y && apt install -y \
+		gcc \
 		file \
 		binutils \
 		gdb \
 		libc6:i386 \
 		&& rm -rf /var/lib/apt/lists/*
 
-# Create the directories for the two exercises, then copy them there.
-RUN		mkdir -p /app/level1 && \
-		mkdir -p /app/level2
+# Copies the exercise files into the container.
+COPY	./level1/	/app/level1/
+COPY	./level2/	/app/level2/
+COPY	./level3/	/app/level3/
 
-COPY	./level1/	/app/level1/ && \
-		./level2/	/app/level2/
-
+# Sets the working directory to /app. 
 WORKDIR	/app
 
+# Keeps the container running.
 ENTRYPOINT ["sleep", "infinity"]
