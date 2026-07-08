@@ -13,10 +13,6 @@ Validating a piscine requires more than just a day or two of investment. To ensu
 - Try to submit work every day: even if something isn’t finished, it’s better to try and turn it in.
 - At least two weeks of work: going into the piscine shouldn’t be taken lightly.
 
-#### Note:
-> It is important not to do these modules alone. For this reason, it is
-> highly recommended to approach these piscines with several students.
-
 ### **Modules to validate**
 
 To validate this piscine you must do the following projects:
@@ -25,8 +21,7 @@ To validate this piscine you must do the following projects:
 - [x] Cybersecurity - ft_otp - OTP
 - [x] Cybersecurity - ft_onion - Web
 - [x] Cybersecurity - Reverse me - Rev
-- [ ] Cybersecurity - Stockholm - Malware
-- [ ] (Optional) Cybersecurity - Iron Dome - Malware
+- [x] Cybersecurity - Stockholm - Malware
 - [ ] Cybersecurity - Inquisitor - Network
 - [ ] Cybersecurity - Vaccine - Web
 
