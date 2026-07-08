@@ -25,8 +25,7 @@ To validate this piscine you must do the following projects:
 - [x] Cybersecurity - ft_otp - OTP
 - [x] Cybersecurity - ft_onion - Web
 - [x] Cybersecurity - Reverse me - Rev
-- [ ] Cybersecurity - Stockholm - Malware
-- [ ] (Optional) Cybersecurity - Iron Dome - Malware
+- [x] Cybersecurity - Stockholm - Malware
 - [ ] Cybersecurity - Inquisitor - Network
 - [ ] Cybersecurity - Vaccine - Web
 
