@@ -1,0 +1,29 @@
+services:
+  server:
+    build: ./server
+    image: server:custom
+    container_name: server
+    networks: ["inquisitor_network"]
+  client:
+    depends_on:
+      - server
+    build: ./client
+    image: client:custom
+    container_name: client
+    networks: ["inquisitor_network"]
+  inquisitor:
+    depends_on:
+      - client
+    build: ./inquisitor
+    image: inquisitor:custom
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    container_name: inquisitor
+    networks: ["inquisitor_network"]
+
+networks:
+  inquisitor_network:
+    name: inquisitor_network
