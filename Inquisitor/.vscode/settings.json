@@ -1,0 +1,14 @@
+{
+  "editor.inlineSuggest.enabled": false,
+  "editor.wordWrap": "off",
+  "editor.quickSuggestions": {
+    "other": false,
+    "comments": false,
+    "strings": false
+  },
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "editor.acceptSuggestionOnEnter": "off",
+  "editor.tabCompletion": "off",
+  "editor.snippetSuggestions": "none"
+}
