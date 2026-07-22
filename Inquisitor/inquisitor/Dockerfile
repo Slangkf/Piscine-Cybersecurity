@@ -14,10 +14,13 @@ RUN		apt update -y && apt upgrade -y && apt install -y \
 		&& rm -rf /var/lib/apt/lists/*
 
 # Copy the scripts into the container.
-COPY ./script/*.py		/app/
+COPY	./script/*.py		/app/
 
 # Set the working directory.
 WORKDIR	/app
+
+# Install the dependencies
+RUN		python3 install.py
 
 # Keep the container running indefinitely.
 ENTRYPOINT ["sleep", "infinity"]

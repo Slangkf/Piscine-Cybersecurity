@@ -39,7 +39,7 @@ The project uses three Docker containers connected through an isolated network:
     - Build all the Docker images: `make build`.
     - Start all the Docker containers: `make up`.
 
-    The terminal will output the IP and MAC addresses of each container.
+    The terminal will display the command to activate the venv in the "inquisitor" container, as well as the IP and MAC addresses of each container.
     
     In separate terminals:
 
@@ -50,22 +50,17 @@ The project uses three Docker containers connected through an isolated network:
 
 2. ### **Set up the client container:**
 
-    Inside the container, run the following commands:
+    Inside the client container:
 	
-    - Create a test folder with numerous files: `python3 create_test_files.py`. 
     - To connect the FTP client to the server: `tnftp server 21`
     - Use `anonymous` as the username.
 
     You can choose your own password. Once this is done, you are connected to the FTP server.
- 
-    To upload a file to the server, run:
-    - `put /home/test_environment/test_file_<number.extension> /uploads/<file_name>`
 
 3. ### **Set up the inquisitor container:**
 
-    Inside the container, run the following commands:
+    Inside the inquisitor container:
 	
-    - Create a venv and install dependencies: `python3 install.py`. 
     - Activate the virtual environment: `source venv/bin/activate`.
 
     To intercept the network traffic through ARP poisoning:
@@ -79,10 +74,10 @@ The project uses three Docker containers connected through an isolated network:
 
 4. ### **Check the server container:**
 
-    In the server container, run the following commands:
+    Inside the server container:
 	
-    - Navigate to the `/uploads` directory: `cd /srv/ftp/uploads/`. 
     - Check that files are correctly uploaded: `ls`.
+    - Check the content of a file: `cat <file_name>`
 
 5. ### **Stop and clean up the project:**
 
@@ -95,6 +90,49 @@ The project uses three Docker containers connected through an isolated network:
 #### Note:
     Running `make destroy` will prompt you for confirmation before removing the project resources.
 
+# Tests
+
+*For these tests, the client IPv4/MAC address pair is: `10.89.1.3 2a:de:ae:2d:af:83` and the server IPv4/MAC address pair is: `10.89.1.2 16:c6:de:1f:b5:f3`*
+
+**From the inquisitor container shell:**
+
+- Run the program without arguments: `python3 inquisitor.py`: should output a usage error listing the required arguments.
+
+- Run the program with invalid arguments: `python3 inquisitor.py string 6:c6:de:1f:b5:f3 10.89.1.2 string2`: should output an error message.
+
+- Run the program with an IPv6 format instead of an IPv4: `python3 inquisitor.py 2001:db8:85a3::8a2e:370:7334 6:c6:de:1f:b5:f1 10.89.1.2 6:c6:de:1f:b5:f3`: should output an error message.
+
+- Run the program with a wrong MAC address format: `python3 inquisitor.py 10.89.1.3 2a:de::2d:af:83 10.89.1.2 16:c6:de:1f:b5:f3`: should output an error message.
+
+- Run the program with a wrong IPv4/MAC pair: `python3 inquisitor.py 10.89.1.3 16:c6:de:1f:b5:f3 10.89.1.2 2a:de:ae:2d:af:83`: should output an error message.
+
+- Run the program with the inquisitor container IPv4/MAC pair: `python3 inquisitor.py 10.89.1.4 16:a6:e1:85:62:28 10.89.1.2 2a:de:ae:2d:af:83`: should output an error message.
+
+- Run the program with the same IPv4/MAC pair for client and server: `python3 inquisitor.py 10.89.1.3 2a:de:ae:2d:af:83 10.89.1.3 2a:de:ae:2d:af:83`: the program should run but not display any file name, since traffic between two truly distinct machines never passes through the inquisitor in this case. The file transfer between the client and the server must still complete normally.
+
+- Run the program with the client/server IPv4/MAC pairs inverted: `python3 inquisitor.py 10.89.1.2 16:c6:de:1f:b5:f3 10.89.1.3 2a:de:ae:2d:af:83`: the program and the file tranfer should run normaly.
+
+- Run the program with the correct arguments: `python3 inquisitor.py 10.89.1.3 2a:de:ae:2d:af:83 10.89.1.2 16:c6:de:1f:b5:f3`: the program should run and wait for a file transfer to display the file name.
+
+- Send a SIGINT to stop the inquisitor program: `CTRL+C`: the program should stop and restore the ARP tables. The file transfer between the FTP client and the FTP server should keep working normally afterward.
+
+**From the client container shell:**
+
+- Check the ARP table before starting the attack: `arp -a`: should show the real MAC addresses for the server and the inquisitor.
+
+- Check the ARP table while the attack is running: `arp -a`: the server's entry should now show the inquisitor's MAC address instead of its real one.
+
+**From within an FTP session on the client (inside the `/uploads` directory):**
+
+- Send a file to the server: `put /home/test_environment/test_file_<number.extension> <file_name_of_your_choice>`: the inquisitor program should display the file name and the transfer should complete.
+
+- Get a file from the server: `get <file_name> /app/<file_name>`: the inquisitor program should display the file name and the transfer should complete.
+
+**From the server container shell:**
+
+- Check the ARP table before starting the attack: `arp -a`: should show the real MAC addresses for the client and the inquisitor.
+
+- Check the ARP table while the attack is running: `arp -a`: the client's entry should now show the inquisitor's MAC address instead of its real one.
 
 # Technical Notes
 
