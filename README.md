@@ -22,7 +22,7 @@ To validate this piscine you must do the following projects:
 - [x] Cybersecurity - ft_onion - Web
 - [x] Cybersecurity - Reverse me - Rev
 - [x] Cybersecurity - Stockholm - Malware
-- [ ] Cybersecurity - Inquisitor - Network
+- [x] Cybersecurity - Inquisitor - Network
 - [ ] Cybersecurity - Vaccine - Web
 
 Each project must be validated in that order. Indeed, it will not be possible to register for a project if the previous project is not valid.
