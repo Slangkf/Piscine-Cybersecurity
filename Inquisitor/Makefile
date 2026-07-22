@@ -16,6 +16,7 @@ build:
 
 up:
 	docker compose up -d
+	@printf "\033[1;33mWarning\033[0m: to activate the venv in the inquisitor container, run: source venv/bin/activate\n"
 	@for id in $$(docker compose ps -q); do \
 		docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}} {{range .NetworkSettings.Networks}}{{.MacAddress}}{{end}}' $$id; \
 	done

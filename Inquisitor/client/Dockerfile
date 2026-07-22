@@ -18,5 +18,8 @@ COPY	./script/create_test_files.py	/app/
 # Set the working directory.
 WORKDIR	/app
 
+# Install the dependencies
+RUN		python3 create_test_files.py
+
 # Keep the container running.
 ENTRYPOINT ["sleep", "infinity"]

@@ -1,7 +1,6 @@
 import argparse
 import ipaddress
 import macaddress
-import libpcap
 import sys
 import signal
 import threading
@@ -17,7 +16,6 @@ def display_file_name(packet):
             payload = packet[Raw].load.decode().strip()
             if payload.startswith("RETR") or payload.startswith("STOR"):
                 parts = payload.split(" ")
-                print(f'File name: {parts}')
                 if len(parts) > 1:
                     print(f'File name: {parts[1]}')
         except Exception as e:
@@ -76,7 +74,6 @@ def inquisitor(ip_src, mac_src, ip_dst, mac_dst):
         sys.exit(0)
 
     signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
 
     t.start()
     sniff(iface="eth0", filter="tcp port 21", prn=display_file_name, store=False)
@@ -100,12 +97,16 @@ def is_valid_argument(arguments):
         answer2 = srp(final_packet2, timeout=2, verbose=False)[0]
 
         if not answer1 or not answer2:
+            print('Unable to verify the provided IP/MAC pairs (no ARP response received).')
             return False
 
         mac_received1 = answer1[0][1].hwsrc
         mac_received2 = answer2[0][1].hwsrc
 
-        return mac_src == macaddress.MAC(mac_received1) and mac_dst == macaddress.MAC(mac_received2)
+        if mac_src != macaddress.MAC(mac_received1) or mac_dst != macaddress.MAC(mac_received2):
+            print('Invalid MAC addresses.')
+            return False
+        return True
 
     except ipaddress.AddressValueError:
         print('The provided IP address is not in IPv4 format.')
@@ -131,8 +132,6 @@ def main():
     args = parse_arguments()
     if is_valid_argument(args):
         inquisitor(args.IP_src, args.MAC_src, args.IP_target, args.MAC_target)
-    else:
-        print('Invalid arguments')
 
 # Execute the main function only when this script is run directly
 if __name__ == "__main__":
