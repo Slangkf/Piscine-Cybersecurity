@@ -20,7 +20,7 @@ To validate this piscine you must do the following projects:
 - [x] Cybersecurity - arachnida - Web
 - [x] Cybersecurity - ft_otp - OTP
 - [x] Cybersecurity - ft_onion - Web
-- [x] Cybersecurity - Reverse me - Rev
+- [x] Cybersecurity - Reverse me - Reverse Engineering
 - [x] Cybersecurity - Stockholm - Malware
 - [x] Cybersecurity - Inquisitor - Network
 - [ ] Cybersecurity - Vaccine - Web
